@@ -1,15 +1,150 @@
+<!--
+ - Postal.js
+ - このファイルは QWEL Project の一部です。
+ - Part of the QWEL Project © QWEL.DESIGN 2025
+ - Licensed under GPL v3 – see https://qwel.design/
+-->
+
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Starter Template</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico">
+    <title>Postal.js</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        font-family: serif;
+        line-height: 1.2;
+        background-color: #fff;
+        color: #333;
+        font-size: 12pt;
+
+      }
+
+      #list {
+        list-style-type: none;
+        display: flex;
+        flex-flow: row wrap;
+        align-content: flex-start;
+        width: 210mm;
+        /*height: 297mm;*/
+        margin: 0 auto;
+        padding: 0 6mm;
+      }
+
+      .item {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: flex-start;
+        width: 66mm;
+        height: 33.9mm;
+        flex: 0 0 66mm;
+        padding: 0 6mm;
+      }
+
+      .item:nth-child(24n + 1), .item:nth-child(24n + 2), .item:nth-child(24n + 3) {
+        height: calc(33.9mm + 12.9mm);
+        padding-block-start: 12.9mm;
+      }
+
+      .item:nth-child(24n - 2), .item:nth-child(24n - 1), .item:nth-child(24n) {
+        height: calc(33.9mm + 12.9mm);
+        padding-block-end: 12.9mm;
+      }
+
+      .item span {
+        display: block;
+        width: 100%;
+        word-break: keep-all;
+      }
+
+      .item-postcode {
+        margin-block: 0.25em;
+        font-family: sans-serif;
+        font-size: 11pt;
+        text-indent: -3mm;
+      }
+
+      .item-postcode::before {
+        content: "〒";
+      }
+
+      .item-name {
+        margin-block: 0.25em;
+        font-size: 14pt;
+        text-align: center;
+      }
+
+      .item-name::after {
+        content: " 様";
+      }
+    </style>
   </head>
   <body>
-    
+    <div id="app">
+      <ul id="list"></ul>
+      <template id="item-template">
+        <li class="item">
+          <span class="item-postcode"></span>
+          <span class="item-address1"></span>
+          <span class="item-address2"></span>
+          <span class="item-address3"></span>
+          <span class="item-name"></span>
+        </li>
+      </template>
+    </div>
+    <script type="module">
+      const sheet = './sheet.csv';
+      const list = document.getElementById('list');
+      const template = document.getElementById('item-template');
 
+      async function fetchCSV(url) {
+        const res = await fetch(url);
+        const text = await res.text();
+        return text;
+      }
 
+      function parseCSV(text) {
+        const lines = text.split('\n');
+        const result = [];
+        const headers = lines[0].split(',');
+
+        for (let i = 1; i < lines.length; i++) {
+          const obj = {};
+          const currentline = lines[i].split(',');
+
+          for (let j = 0; j < headers.length; j++) {
+            obj[headers[j]] = currentline[j];
+          }
+
+          result.push(obj);
+        }
+
+        return result;
+      }
+
+      fetchCSV(sheet)
+        .then(text => {
+          const data = parseCSV(text);
+          console.log(data);
+          data.forEach(item => {
+            if (item.Check === 'FALSE') return;
+            const clone = template.content.cloneNode(true);
+            clone.querySelector('.item-postcode').textContent = item.PostCode;
+            clone.querySelector('.item-address1').textContent = item.Address1;
+            clone.querySelector('.item-address2').textContent = item.Address2;
+            clone.querySelector('.item-address3').textContent = item.Address3;
+            clone.querySelector('.item-name').textContent = item.Name;
+            list.appendChild(clone);
+          });
+        })
+        .catch(err => console.error(err));
+    </script>
   </body>
 </html>

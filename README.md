@@ -1,6 +1,11 @@
-## QWEL STARTER TEMPLATE
+## POSTAL-JS (住所ラベル自動生成スクリプト)
 
-[QWEL.DESIGN](https://qwel.design) のweb開発のためのスターターキット
+[A-one製 ラベルシール](https://www.a-one.co.jp/) 品番72224 を使用して印刷します。  
+住所録を記載したCSVファイルを読み込んで、住所ラベルを自動生成します。  
+住所録には、"Name", "PostCode", "Address1", "Address2", "Address3", "Check" のフィールドを設けてください。  
+住所は、"Address1", "Address2", "Address3" の各フィールドごとに改行されます。  
+"Check"の値によって、印刷の可否を選択できます。  
+必ず余白無しで印刷してください。  
 
 ## ライセンス | License
 
