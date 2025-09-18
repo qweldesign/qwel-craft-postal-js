@@ -31,10 +31,10 @@
         display: flex;
         flex-flow: row wrap;
         align-content: flex-start;
-        width: 210mm;
+        width: 198mm; /*上下左右に余白を6mm設ける*/
         /*height: 297mm;*/
         margin: 0 auto;
-        padding: 0 6mm;
+        padding: 0;
       }
 
       .item {
@@ -49,13 +49,13 @@
       }
 
       .item:nth-child(24n + 1), .item:nth-child(24n + 2), .item:nth-child(24n + 3) {
-        height: calc(33.9mm + 12.9mm);
-        padding-block-start: 12.9mm;
+        height: calc(33.9mm + 6.9mm);
+        padding-block-start: 6.9mm;
       }
 
       .item:nth-child(24n - 2), .item:nth-child(24n - 1), .item:nth-child(24n) {
-        height: calc(33.9mm + 12.9mm);
-        padding-block-end: 12.9mm;
+        height: calc(33.9mm + 6.9mm);
+        padding-block-end: 6.9mm;
       }
 
       .item span {
